@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width">
+		<title>Project Request Form</title>
+
+		<!--put your external stylesheet links here-->
+		<link rel="stylesheet" href="https://js.arcgis.com/4.8/esri/css/main.css">
+		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="css/jquery-ui.css">
+		<link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Quattrocento" rel="stylesheet">
+		<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+		<!--[if IE<9]>
+			<link rel="stylesheet" href="css/style.ie.css">
+		<![endif]-->
+	</head>
+
+	<body>
+		<!--put your initial page content here-->
+			
+		<!--you can also use this space for internal scripts or stylesheets;
+		place these within <script> or <style> tags-->
+		<div id="wrapper">
+			<header class="bar">
+				<div class="logo"><img src="img/dotd.png"></div>
+				<div class="title1"><h2>LA DOTD Projects</h2></div>
+				<div class="about"><img class="fa fa-info-circle fa-lg"></div>
+				<!-- <div id="dialog" title="About the Application"></div> -->
+				<!-- <div class="edit"><img class="fa fa-pen-square fa-lg"></div> -->
+			</header>
+			<div id="viewDiv">
+				<div id="dialog" title="About the Application">
+					<p>This application was created by DOTD GIS in August 2018.
+						<br><br>All of the project information was created by DOTD in September of 2017.
+						The project data is currently being updated annually with the intent for it to be
+						updated daily in the future.
+						<br><br>The urbanized area value is populated from the Urbanized Area feature that is maintained
+						by DOTD GIS. The current feature was last revised on 09/18/2014 and are based
+						on the 2010 US Census data and agreements made between DOTD and local metropolitan areas.
+						<br><br>The parish layer was created using original linework that was manually digitized using
+						USGS Quadrangle Maps along with legal parish boundary descriptions.
+						<br><br>The functional classification values is populated from the Functional Classification
+						feature which is the 2014 final Functional Classification of all public roads in Louisiana based
+						on the 2010 US Census data.
+						<br><br>The routes displayed in this map are one of two LRS Route Networks that the department manages.
+						LRSID routes is the department's routes using the Control Section/Log Mile Linear Referencing Method. LRSID routes
+						is being managed and updated daily.
+					</p>
+				</div>
+				<div id="helpDialog" title="Help Adding a Proposed Project">
+					<p>This is a step by step guide to help add a prosed project.
+						<br><br>The side panel allows you to enter information about the project before drawing it.
+						<br>You can also allow the system to automatically populate the majority of the fields for you.
+						<br><br>When drawing the project, you need to be zoomed in to verify that you're drawing on the roads.
+						<br>A zoom level like the following screenshot should be good:<br>
+						<img src="img/drawingZoom.PNG" class="help"></br>
+						<br><br>After drawing the project, you will see a confirmation box like below:
+						<img src="img/confirmRoute.PNG" class="help">
+						<br>This box will only display if you put a project on a non-divided roadway.
+						<br>Click OK if you want to use the route mentioned in the box; otherwise click Cancel.</br>
+						<br>After clicking OK or Cancel, you'll notice that the attribute fields have been filled in.
+						<br>You can change any of the values in the box or you can click Clear Fields to start all over.
+						<br><br>Once you have the correct information in the attribute boxes, click Submit.
+						<br>If the project was successfully submitted to the database, you'll see this alert:
+						<img src="img/success.PNG" class="help">
+					</p>
+				</div>
+				<div id="line-button" class="esri-widget esri-widget--button esri-interactive" title="Draw polyline">
+					<span class="esri-icon-polyline"></span>
+				</div>
+				<div id="info-div">
+					<h4 class="list-heading">Filter Projects</h4>
+					<legend class="show">Show:</legend>
+					<div id="projectCheck">
+						<input type="radio" id="district" name="features" class="chk" value="district"/>
+						<label for="district">DOTD District</label>
+
+						<input type="radio" id="parish" name="features" class="chk" value="parish"/>
+						<label for="parish">Parish</label>
+
+						<input type="radio" id="senateDistrict" name="features" class="chk" value="senateDistrict"/>
+						<label for="senateDistrict">La Senate Districts</label>
+
+						<input type="radio" id="houseDistrict" name="features" class="chk" value="houseDistrict"/>
+						<label for="houseDistrict">La House of Representative Districts</label>
+					</div>
+					<legend class="in">In:</legend>
+					<select id="districtFilter">
+						<option value="" selected>All DOTD Districts</option>
+						<option value="02">District 02</option>
+						<option value="03">District 03</option>
+						<option value="04">District 04</option>
+						<option value="05">District 05</option>
+						<option value="07">District 07</option>
+						<option value="08">District 08</option>
+						<option value="58">District 58</option>
+						<option value="61">District 61</option>
+						<option value="62">District 62</option>
+					</select>
+					<select id="senateFilter">
+						<option value="" selected>All Senate Districts</option>
+						<option value="1">Senate District 1</option>
+						<option value="2">Senate District 2</option>
+						<option value="3">Senate District 3</option>
+						<option value="4">Senate District 4</option>
+						<option value="5">Senate District 5</option>
+						<option value="6">Senate District 6</option>
+						<option value="7">Senate District 7</option>
+						<option value="8">Senate District 8</option>
+						<option value="9">Senate District 9</option>
+						<option value="10">Senate District 10</option>
+						<option value="11">Senate District 11</option>
+						<option value="12">Senate District 12</option>
+						<option value="13">Senate District 13</option>
+						<option value="14">Senate District 14</option>
+						<option value="15">Senate District 15</option>
+						<option value="16">Senate District 16</option>
+						<option value="17">Senate District 17</option>
+						<option value="18">Senate District 18</option>
+						<option value="19">Senate District 19</option>
+						<option value="20">Senate District 20</option>
+						<option value="21">Senate District 21</option>
+						<option value="22">Senate District 22</option>
+						<option value="23">Senate District 23</option>
+						<option value="24">Senate District 24</option>
+						<option value="25">Senate District 25</option>
+						<option value="26">Senate District 26</option>
+						<option value="27">Senate District 27</option>
+						<option value="28">Senate District 28</option>
+						<option value="29">Senate District 29</option>
+						<option value="30">Senate District 30</option>
+						<option value="31">Senate District 31</option>
+						<option value="32">Senate District 32</option>
+						<option value="33">Senate District 33</option>
+						<option value="34">Senate District 34</option>
+						<option value="35">Senate District 35</option>
+						<option value="36">Senate District 36</option>
+						<option value="37">Senate District 37</option>
+						<option value="38">Senate District 38</option>
+						<option value="39">Senate District 39</option>
+					</select>
+					<select id="houseFilter">
+						<option value="" selected>All House Districts</option>
+						<option value="1">House District 1</option>
+						<option value="2">House District 2</option>
+						<option value="3">House District 3</option>
+						<option value="4">House District 4</option>
+						<option value="5">House District 5</option>
+						<option value="6">House District 6</option>
+						<option value="7">House District 7</option>
+						<option value="8">House District 8</option>
+						<option value="9">House District 9</option>
+						<option value="10">House District 10</option>
+						<option value="11">House District 11</option>
+						<option value="12">House District 12</option>
+						<option value="13">House District 13</option>
+						<option value="14">House District 14</option>
+						<option value="15">House District 15</option>
+						<option value="16">House District 16</option>
+						<option value="17">House District 17</option>
+						<option value="18">House District 18</option>
+						<option value="19">House District 19</option>
+						<option value="20">House District 20</option>
+						<option value="21">House District 21</option>
+						<option value="22">House District 22</option>
+						<option value="23">House District 23</option>
+						<option value="24">House District 24</option>
+						<option value="25">House District 25</option>
+						<option value="26">House District 26</option>
+						<option value="27">House District 27</option>
+						<option value="28">House District 28</option>
+						<option value="29">House District 29</option>
+						<option value="30">House District 30</option>
+						<option value="31">House District 31</option>
+						<option value="32">House District 32</option>
+						<option value="33">House District 33</option>
+						<option value="34">House District 34</option>
+						<option value="35">House District 35</option>
+						<option value="36">House District 36</option>
+						<option value="37">House District 37</option>
+						<option value="38">House District 38</option>
+						<option value="39">House District 39</option>
+						<option value="40">House District 40</option>
+						<option value="41">House District 41</option>
+						<option value="42">House District 42</option>
+						<option value="43">House District 43</option>
+						<option value="44">House District 44</option>
+						<option value="45">House District 45</option>
+						<option value="46">House District 46</option>
+						<option value="47">House District 47</option>
+						<option value="48">House District 48</option>
+						<option value="49">House District 49</option>
+						<option value="50">House District 50</option>
+						<option value="51">House District 51</option>
+						<option value="52">House District 52</option>
+						<option value="53">House District 53</option>
+						<option value="54">House District 54</option>
+						<option value="55">House District 55</option>
+						<option value="56">House District 56</option>
+						<option value="57">House District 57</option>
+						<option value="58">House District 58</option>
+						<option value="59">House District 59</option>
+						<option value="60">House District 60</option>
+						<option value="61">House District 61</option>
+						<option value="62">House District 62</option>
+						<option value="63">House District 63</option>
+						<option value="64">House District 64</option>
+						<option value="65">House District 65</option>
+						<option value="66">House District 66</option>
+						<option value="67">House District 67</option>
+						<option value="68">House District 68</option>
+						<option value="69">House District 69</option>
+						<option value="70">House District 70</option>
+						<option value="71">House District 71</option>
+						<option value="72">House District 72</option>
+						<option value="73">House District 73</option>
+						<option value="74">House District 74</option>
+						<option value="75">House District 75</option>
+						<option value="76">House District 76</option>
+						<option value="77">House District 77</option>
+						<option value="78">House District 78</option>
+						<option value="79">House District 79</option>
+						<option value="80">House District 80</option>
+						<option value="81">House District 81</option>
+						<option value="82">House District 82</option>
+						<option value="83">House District 83</option>
+						<option value="84">House District 84</option>
+						<option value="85">House District 85</option>
+						<option value="86">House District 86</option>
+						<option value="87">House District 87</option>
+						<option value="88">House District 88</option>
+						<option value="89">House District 89</option>
+						<option value="90">House District 90</option>
+						<option value="91">House District 91</option>
+						<option value="92">House District 92</option>
+						<option value="93">House District 93</option>
+						<option value="94">House District 94</option>
+						<option value="95">House District 95</option>
+						<option value="96">House District 96</option>
+						<option value="97">House District 97</option>
+						<option value="98">House District 98</option>
+						<option value="99">House District 99</option>
+						<option value="100">House District 100</option>
+						<option value="101">House District 101</option>
+						<option value="102">House District 102</option>
+						<option value="103">House District 103</option>
+						<option value="104">House District 104</option>
+						<option value="105">House District 105</option>
+					</select>
+					<select id="parishFilter">
+						<option value="" selected>All Parishes</option>
+						<option value="01">Acadia</option>
+						<option value="02">Allen</option>
+						<option value="03">Ascension</option>
+						<option value="04">Assumption</option>
+						<option value="05">Avoyelles</option>
+						<option value="06">Beauregard</option>
+						<option value="07">Bienville</option>
+						<option value="08">Bossier</option>
+						<option value="09">Caddo</option>
+						<option value="10">Calcasieu</option>
+						<option value="11">Caldwell</option>
+						<option value="12">Cameron</option>
+						<option value="13">Catahoula</option>
+						<option value="14">Claiborne</option>
+						<option value="15">Concordia</option>
+						<option value="16">De Soto</option>
+						<option value="17">East Baton Rouge</option>
+						<option value="18">East Carroll</option>
+						<option value="19">East Feliciana</option>
+						<option value="20">Evangeline</option>
+						<option value="21">Franklin</option>
+						<option value="22">Grant</option>
+						<option value="23">Iberia</option>
+						<option value="24">Iberville</option>
+						<option value="25">Jackson</option>
+						<option value="26">Jefferson</option>
+						<option value="27">Jefferson Davis</option>
+						<option value="28">Lafayette</option>
+						<option value="29">Lafourche</option>
+						<option value="30">La Salle</option>
+						<option value="31">Lincoln</option>
+						<option value="32">Livingston</option>
+						<option value="33">Madison</option>
+						<option value="34">Morehouse</option>
+						<option value="35">Natchitoches</option>
+						<option value="36">Orleans</option>
+						<option value="37">Ouachita</option>
+						<option value="38">Plaquemines</option>
+						<option value="39">Pointe Coupee</option>
+						<option value="40">Rapides</option>
+						<option value="41">Red River</option>
+						<option value="42">Richland</option>
+						<option value="43">Sabine</option>
+						<option value="44">St. Bernard</option>
+						<option value="45">St. Charles</option>
+						<option value="46">St. Helena</option>
+						<option value="47">St. James</option>
+						<option value="48">St. John the Baptist</option>
+						<option value="49">St. Landry</option>
+						<option value="50">St. Martin</option>
+						<option value="51">St. Mary</option>
+						<option value="52">St. Tammany</option>
+						<option value="53">Tangipahoa</option>
+						<option value="54">Tensas</option>
+						<option value="55">Terrebonne</option>
+						<option value="56">Union</option>
+						<option value="57">Vermilion</option>
+						<option value="58">Vernon</option>
+						<option value="59">Washington</option>
+						<option value="60">Webster</option>
+						<option value="61">West Baton Rouge</option>
+						<option value="62">West Carroll</option>
+						<option value="63">West Feliciana</option>
+						<option value="64">Winn</option>
+					</select>
+					<input type="button" class="edit-button" value="Filter" id="filterBtn">
+					<input type="button" class="edit-button" value="Clear Filter" id="clearFilterBtn">
+				</div>
+				<div id="panel">
+					<h3 class="title">
+						Project Request Form <img id="help" class="fa fa-question-circle fa-sm">
+					</h3>
+										
+					<table class="projectTable">
+						<tbody>
+							<tr>
+								<th id="left">DOTD District:</th>
+								<td id="dotdDistrict"><input type="text" class="dotdDistrict"></td>
+							</tr>
+							<tr>
+								<th id="left">Parish:</th>
+								<td id="parish"><input type="text" class="parishNum"></td>
+							</tr>
+							<tr id="ControlSection">
+								<th id="left">Control Section:</th>
+								<td id="controlsection"><input type="text" class="cs"></td>
+							</tr>
+							<tr>
+								<th id="left">LRSID:</th>
+								<td id="lrsid"><input type="text" class="lrsID" maxlength="18"></td>
+							</tr>
+							<tr>
+								<th id="left">Begin Logmile:</th>
+								<td id="beginLogmile"><input type="text" class="bL"></td>
+							</tr>
+							<tr>
+								<th id="left">End Logmile:</th>
+								<td id="endLogmile"><input type="text" class="eL"></td>
+							</tr>
+							<tr>
+								<th id="left">Urban Length:</th>
+								<td id="urbanLength"><input type="text"></td>
+							</tr>
+							<tr>
+								<th id="left" class="local">Rural/Urban:</th>
+								<td id="ruralUrban" class="localValue">
+									<select name="rural" id="rural">
+										<option value="">--Select Rural or Urban--</option>
+										<option value="R">Rural</option>
+										<option value="U">Urban</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<th id="left" class="local">Federal Aid System:</th>
+								<td id="fedAid" class="localValue">
+									<select name="fedAids" id="fedAids">
+										<option value="">--Select a Federal Aid System--</option>
+										<option value="I">Interstate</option>
+										<option value="N">NHS Non-Interstate</option>
+										<option value="Z">Not on any Federal Aid System</option>
+										<option value="O">Other Federal Aid Highway/STP</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<th id="left" class="local">Functional Class:</th>
+								<td id="functClass" class="localValue">
+									<select name="functClass" id="functClass">
+										<option value="">--Select a Functional Class--</option>
+										<option value="F">Freeways & Expressways</option>
+										<option value="L">Local</option>
+										<option value="C">Major Collector</option>
+										<option value="M">Minor Arterial</option>
+										<option value="R">Minor Collector</option>
+										<option value="N">No Classification</option>
+										<option value="P">Principal Arterial</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<th id="left">Urbanized Area:</th>
+								<td id="urbanized">
+									<select name="cities" id="cities">
+										<option value="">--Select an Urbanized Area--</option>
+										<option value="01279">Alexandria</option>
+										<option value="05680">Baton Rouge</option>
+										<option value="36514">Hammond</option>
+										<option value="40375">Houma</option>
+										<option value="46045">Lafayette</option>
+										<option value="46531">Lake Charles</option>
+										<option value="53794">Mandeville-Covington</option>
+										<option value="58330">Monroe</option>
+										<option value="62677">New Orleans</option>
+										<option value="81739">Shreveport</option>
+										<option value="82468">Slidell</option>
+										<option value="00001">Small Urban Area</option>
+										<option value="00002">Statewide Program</option>
+										<option value="00003">Rural</option>
+									</select>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<div style="text-align: center;">
+						<button id="helpbtn" class="panelHelpBtn" type="button">Help</button>
+						<button id="submitbtn" class="panelBtn" type="button">Submit</button>
+						<button id="clearbtn" class="panelBtn" type="button">Clear Fields</button>
+						<button id="closebutton" class="panelBtn" type="button">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--put your external script links here-->
+		<script type="text/javascript" src="lib/jquery-3.3.1.js"></script>
+		<script type="text/javascript" src="js/jquery-ui.js"></script>
+		<script src="https://js.arcgis.com/4.8/"></script>
+		<script type="text/javascript" src="js/main.js"></script>
+	</body>
+</html>
