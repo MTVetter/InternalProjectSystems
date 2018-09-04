@@ -275,6 +275,22 @@ $(document).ready(function (){
                         width: 5
                     }
                 }, {
+                    featureLayer: routes,
+                    displayField: "FullName",
+                    searchFields: ["FullName"],
+                    outFields: ["*"],
+                    filter: {
+                        where: "RouteID LIKE '%-%-1-%' OR RouteID LIKE '______________1___'"
+                    },
+                    name: "Route Names",
+                    popupTemplate: routeTemplate,
+                    zoomScale: 120000,
+                    resultSymbol: {
+                        type: "simple-line",
+                        color: [255, 255, 25],
+                        width: 5
+                    }
+                }, {
                     featureLayer: parish,
                     outFields: ["*"],
                     popupTemplate: parishTemplate,
@@ -581,84 +597,6 @@ $(document).ready(function (){
 
         //=======================================
         //Set up the REST calls to get the attributes
-        function getAttributes(path, attributes){
-            //Determine the number of clicks the user did
-            var num = path.geometry.paths[0].length -1;
-
-            //Get the coordinates of the first click
-            var x = path.geometry.paths[0][0][0];
-            var y = path.geometry.paths[0][0][1];
-            //Get the coordinates of the last click
-            var x2 = path.geometry.paths[0][num][0];
-            var y2 = path.geometry.paths[0][num][1];
-
-            
-
-            esriRequest("https://giswebnew.dotd.la.gov/arcgis/rest/services/Transportation/State_LRS_Route_Networks/MapServer/exts/LRSServer/networkLayers/0/geometryToMeasure?f=json&locations=[{'geometry':{'x':" + x+",'y':" +y+ "}}]&tolerance=10&inSR=102100", {
-                responseType: "json"
-            }).then(function(response){
-                var json = response.data;
-                var locations = json.locations[0].results[0];
-                var road = locations.routeId;
-                var measure = locations.measure;
-                var split = road.split("-");
-                attributes["LRSID"] = road;
-                attributes["BeginLogmile"] = measure;
-                attributes["ControlSection"] = split[0] + "-" + split[1];
-                $("#lrsid input:text").val(road);
-                $("#beginLogmile input:text").val(measure);
-                $("#controlsection input:text").val(split[0] + "-" + split[1]);
-            });
-
-            esriRequest("https://giswebnew.dotd.la.gov/arcgis/rest/services/Transportation/State_LRS_Route_Networks/MapServer/exts/LRSServer/networkLayers/0/geometryToMeasure?f=json&locations=[{'geometry':{'x':" + x2+",'y':" +y2+ "}}]&tolerance=10&inSR=102100", {
-                responseType: "json"
-            }).then(function(response){
-                var json = response.data;
-                var locations = json.locations[0].results[0];
-                var road = locations.routeId;
-                var measure = locations.measure;
-                attributes["EndLogmile"] = measure;
-                $("#endLogmile input:text").val(measure);
-            });
-
-            esriRequest("https://giswebnew.dotd.la.gov/arcgis/rest/services/Boundaries/LA_Parishes/FeatureServer/0/query?where=&objectIds=&time=&geometry="+x+","+ y+"&geometryType=esriGeometryPoint&inSR=102100&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=&gdbVersion=&returnDistinctValues=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&multipatchOption=&resultOffset=&resultRecordCount=&f=pjson",{
-                responseType: "json"
-            }).then(function(response){
-                var parishJSON = response.data;
-                var parishLocations = parishJSON.features[0].attributes;
-                var parishName = parishLocations.Parish_Num;
-                var district = parishLocations.DOTD_Distr;
-                attributes["Parish"] = parishName;
-                attributes["DOTDDistrict"] = district;
-                $(".parishNum").val(parishName);
-                $("#dotdDistrict input:text").val(district);
-            });
-
-            esriRequest("https://giswebnew.dotd.la.gov/arcgis/rest/services/Static_Data/LABoundaries/FeatureServer/3/query?where=&objectIds=&time=&geometry=" +x+","+y+"&geometryType=esriGeometryPoint&inSR=102100&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=&gdbVersion=&returnDistinctValues=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&multipatchOption=&resultOffset=&resultRecordCount=&f=pjson",{
-                responseType: "json"
-            }).then(function(response){
-                var cityJSON = response.data;
-                var cityLocations = cityJSON.features[0].attributes;
-                var cityCode = cityLocations.Metro_Area_Code;
-                if (cityCode){
-                    attributes["UrbanizedArea"] = cityCode;
-                    $("#cities").find("option[value='" +cityCode+"']").attr("selected",true);
-                    attributes["UrbanRural"] = "U";
-                    $("#ruralUrban input:text").val("U");
-                    
-                } else {
-                    console.log("It finally worked!");
-                    attributes["UrbanizedArea"] = "00003";
-                    $("#cities").find("option[value='00003']").attr("selected",true);
-                    attributes["UrbanRural"] = "R";
-                    $("#ruralUrban input:text").val("R");
-                }
-            });
-            
-            return attributes;
-        }
-
-        //Set up the REST call to get the parish values
         function getParish(path, attributes){
             //Determine the number of clicks the user did
             var num = path.geometry.paths[0].length -1;
