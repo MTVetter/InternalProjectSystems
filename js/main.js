@@ -1133,10 +1133,23 @@ $(document).ready(function (){
                 var cityJSON = response.data;
                 console.log(cityJSON);
                 if (cityJSON.features.length == 0){
-                    attributes["UrbanizedArea"] = "00003";
-                    attributes["UrbanRural"] = "R";
-                    $("#cities").val("00003");
-                    $("#rural").val("R");
+                    esriRequest("https://giswebnew.dotd.la.gov/arcgis/rest/services/Static_Data/LABoundaries/FeatureServer/1/query?where=&objectIds=&time=&geometry=" +x+","+y+"&geometryType=esriGeometryPoint&inSR=102100&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=&gdbVersion=&returnDistinctValues=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&multipatchOption=&resultOffset=&resultRecordCount=&f=pjson",{
+                        responseType: "json"
+                    }).then(function(response){
+                        var urbanJSON = response.data;
+                        console.log(urbanJSON);
+                        if (urbanJSON.features.length >= 1){
+                            attributes["UrbanizedArea"] = "00001";
+                            attributes["UrbanRural"] = "U";
+                            $("#cities").val("00001");
+                            $("#rural").val("U");
+                        } else {
+                            attributes["UrbanizedArea"] = "00003";
+                            attributes["UrbanRural"] = "R";
+                            $("#cities").val("00003");
+                            $("#rural").val("R");
+                        }
+                    });
                 } else {
                     var cityLocations = cityJSON.features[0].attributes;
                     var cityCode = cityLocations.Metro_Area_Code;
