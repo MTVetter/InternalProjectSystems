@@ -43,6 +43,9 @@ body{
     z-index: 1;
     order: -1;
 }
+h3{
+    padding-left: 40px;
+}
 #viewDiv{
     display: flex;
     flex: 2 1 auto;
